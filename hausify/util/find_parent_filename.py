@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 import os
 from pathlib import Path
 
@@ -14,7 +14,7 @@ def get_git_root() -> Path:
 
 def search_upward_for_parent_name(
     filepath: Path,
-    parent_file: str,
+    parent_file: Union[str, list[str]],
     rootdir: Optional[Path] = None,
 ) -> Optional[Path]:
     """Searches upward from the given filename to find a file with the parent name.
@@ -27,6 +27,11 @@ def search_upward_for_parent_name(
     Returns:
         str: The path to the parent file if found, otherwise an empty string.
     """
+    if isinstance(parent_file, str):
+        needles = [parent_file]
+    elif isinstance(parent_file, list):
+        needles = parent_file
+
     if rootdir is None:
         rootdir = get_git_root()
 
@@ -37,18 +42,19 @@ def search_upward_for_parent_name(
     depth = 0
 
     while depth < 50:  # Limit the search depth to prevent infinite loops
-        parent_path = current_dir / parent_file
-        print(parent_path)
-
-        if parent_path.is_file():
-            return parent_path
+        for needle in needles:
+            possible_path = current_dir / needle
+            if possible_path.is_file():
+                return possible_path
 
         if current_dir == rootdir:
+            # If we reach the root directory, stop searching
             break
 
         current_dir = current_dir.parent
         if not current_dir.exists():
             break
+
         depth += 1
 
     return None

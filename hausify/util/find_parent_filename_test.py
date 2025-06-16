@@ -119,3 +119,25 @@ def test_search_upward_for_parent_name_does_not_find_above_root(tmp_path):
     )
 
     assert found_path is None
+
+
+def test_search_upward_for_parent_name_does_not_finds_first_of(tmp_path):
+    from hausify.util.find_parent_filename import search_upward_for_parent_name
+    from pathlib import Path
+
+    _build_test_file_structure(
+        [
+            ("above_root/root/dir1/dir2/", "file"),
+            ("above_root/root/dir1/", "needle_a"),
+            ("above_root/root/dir1/", "needle_b"),
+        ],
+        tmp_path,
+    )
+
+    found_path = search_upward_for_parent_name(
+        filepath=tmp_path / Path("above_root/root/dir1/dir2/file"),
+        parent_file=["not_present", "needle_b", "needle_a"],
+        rootdir=tmp_path / Path("above_root/root"),
+    )
+
+    assert found_path == tmp_path / Path("above_root/root/dir1/needle_b")
