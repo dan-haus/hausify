@@ -5,14 +5,13 @@ from typing import Callable
 from hausify.util.search import find_parent_configs
 
 _configs = [
-    ".isort.cfg",
-    "pyproject.toml",
+    ".flake8",
     "setup.cfg",
     "tox.ini",
 ]
 
 
-def exec_isort(
+def exec_flake8(
     root: Path,
     files: list[Path],
     exec_cmd: Callable = subprocess.run,
@@ -27,7 +26,7 @@ def exec_isort(
         if len(fileset) == 0:
             continue
 
-        result = _run_isort_on_set(
+        result = _run_flake8_on_set(
             fileset=fileset,
             config=config,
             exec_cmd=exec_cmd,
@@ -39,19 +38,19 @@ def exec_isort(
     return "\n".join(all_errors)
 
 
-def _run_isort_on_set(
+def _run_flake8_on_set(
     fileset: list[Path],
     config: Path,
     exec_cmd: Callable = subprocess.run,
 ) -> str:
-    """Run isort on a set of files with a specific config."""
+    """Run flake8 on a set of files with a specific config."""
 
     cmd = [
-        "isort",
-        "--color",
+        "flake8",
+        "--color=always",
     ]
     if config.is_file():
-        cmd.extend(["--settings-path", str(config)])
+        cmd.extend(["--config", str(config)])
 
     cmd.extend(str(f) for f in fileset)
 
@@ -59,4 +58,4 @@ def _run_isort_on_set(
         result = exec_cmd(cmd, capture_output=True, text=True, check=True)
         return result.stdout
     except subprocess.CalledProcessError as e:
-        return e.stderr
+        return e.stdout + e.stderr

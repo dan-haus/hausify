@@ -28,6 +28,19 @@ def main():
             print(result)
             should_exit = True
 
+    if args.tool == "all" or args.tool == "flake8":
+        from hausify.runners.exec_flake8 import exec_flake8
+
+        result = exec_flake8(
+            tree.rootdir,
+            tree.source_files,
+            exec_cmd=subprocess_run,
+        )
+        if result != "":
+            print("FLAKE8 ERRORS:")
+            print(result)
+            should_exit = True
+
     if should_exit:
         sys.exit(1)
 
