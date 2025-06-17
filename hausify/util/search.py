@@ -41,7 +41,8 @@ def _find_closest_parent(
         file (Path): The file to start searching from.
         config (str): The name of the configuration file to search for.
     Returns:
-        Path: The path to the closest parent directory containing the configuration file, or the root directory if not found.
+        Path: The path to the closest parent directory containing the
+          configuration file, or the root directory if not found.
     """
     current_dir = file.parent
     if not current_dir.exists():

@@ -26,7 +26,8 @@ class SourceTree:
     ):
         """Initialize the SourceTree with a root directory and source files.
         Args:
-            rootdir (str): The root directory of the project. If empty, it will try to find the git root.
+            rootdir (str): The root directory of the project. If empty, it will try
+                to find the git root.
             source_files (list[str]): List of source files relative to the root directory.
             exclude_dirs (list[str]): List of directory patterns to exclude from discovery.
         """
