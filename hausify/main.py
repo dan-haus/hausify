@@ -1,5 +1,5 @@
 from hausify.args import parse_args
-from hausify.filesystem import SourceTree
+from hausify.util.filesystem import SourceTree
 
 
 def main():
