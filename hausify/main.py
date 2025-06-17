@@ -2,10 +2,10 @@ import sys
 from subprocess import run as subprocess_run
 
 from hausify.args import parse_args
-from hausify.runners.exec_black import exec_black
-from hausify.runners.exec_flake8 import exec_flake8
-from hausify.runners.exec_isort import exec_isort
-from hausify.runners.exec_mypy import exec_mypy
+from hausify.runners import exec_black
+from hausify.runners import exec_flake8
+from hausify.runners import exec_isort
+from hausify.runners import exec_mypy
 from hausify.util.filesystem import SourceTree
 
 
