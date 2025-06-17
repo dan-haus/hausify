@@ -2,6 +2,7 @@ import sys
 from subprocess import run as subprocess_run
 
 from hausify.args import parse_args
+from hausify.runners.exec_black import exec_black
 from hausify.runners.exec_flake8 import exec_flake8
 from hausify.runners.exec_isort import exec_isort
 from hausify.runners.exec_mypy import exec_mypy
@@ -49,6 +50,17 @@ def main():
         )
         if result != "":
             print("MYPY ERRORS:")
+            print(result)
+            should_exit = True
+
+    if args.tool == "all" or args.tool == "black":
+        result = exec_black(
+            tree.rootdir,
+            tree.source_files,
+            exec_cmd=subprocess_run,
+        )
+        if result != "":
+            print("BLACK ERRORS:")
             print(result)
             should_exit = True
 
