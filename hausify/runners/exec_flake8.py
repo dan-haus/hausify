@@ -33,7 +33,7 @@ def exec_flake8(
         )
 
         if result != "":
-            all_errors.append(f"Error in {config}:\n{result}")
+            all_errors.append(f"(using config {config}):\n{result}")
 
     return "\n".join(all_errors)
 
