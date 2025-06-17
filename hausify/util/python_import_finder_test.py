@@ -1,17 +1,17 @@
 import pytest
+from dataclasses import dataclass
 
 
 def test_python_import_finder_returns_correct_non_import_ranges():
+    @dataclass
     class TestCase:
-        def __init__(
-            self,
-            name: str,
-            source_lines: list[str],
-            expected_ranges: list[tuple[int, int]],
-        ):
-            self.name = name
-            self.source = "\n".join(source_lines)
-            self.expected_ranges = expected_ranges
+        name: str
+        source_lines: list[str]
+        expected_ranges: list[tuple[int, int]]
+
+        @property
+        def source(self) -> str:
+            return "\n".join(self.source_lines)
 
     TEST_CASES: list[TestCase] = [
         TestCase(
@@ -53,17 +53,11 @@ def test_python_import_finder_returns_correct_non_import_ranges():
 
 
 def test__merge_consecutive_ranges_success_cases():
-
+    @dataclass
     class TestCase:
-        def __init__(
-            self,
-            name: str,
-            input_ranges: list[tuple[int, int]],
-            expected_ranges: list[tuple[int, int]],
-        ):
-            self.name = name
-            self.input_ranges = input_ranges
-            self.expected_ranges = expected_ranges
+        name: str
+        input_ranges: list[tuple[int, int]]
+        expected_ranges: list[tuple[int, int]]
 
     TEST_CASES: list[TestCase] = [
         TestCase(
@@ -113,17 +107,15 @@ def test__merge_consecutive_ranges_success_cases():
 
 
 def test__get_import_line_ranges_success_cases():
-
+    @dataclass
     class TestCase:
-        def __init__(
-            self,
-            name: str,
-            input_lines: list[str],
-            expected_ranges: list[tuple[int, int]],
-        ):
-            self.name = name
-            self.source = "\n".join(input_lines)
-            self.expected_ranges = expected_ranges
+        name: str
+        input_lines: list[str]
+        expected_ranges: list[tuple[int, int]]
+
+        @property
+        def source(self) -> str:
+            return "\n".join(self.input_lines)
 
     TEST_CASES: list[TestCase] = [
         TestCase(
@@ -189,16 +181,11 @@ def test__get_import_line_ranges_success_cases():
 
 
 def test__get_empty_line_ranges_success_cases():
+    @dataclass
     class TestCase:
-        def __init__(
-            self,
-            name: str,
-            input_lines: list[str],
-            expected_ranges: list[tuple[int, int]],
-        ):
-            self.name = name
-            self.input_lines = input_lines
-            self.expected_ranges = expected_ranges
+        name: str
+        input_lines: list[str]
+        expected_ranges: list[tuple[int, int]]
 
     TEST_CASES: list[TestCase] = [
         TestCase(
@@ -264,18 +251,12 @@ def test__get_empty_line_ranges_success_cases():
 
 
 def test__invert_ranges_success_cases():
+    @dataclass
     class TestCase:
-        def __init__(
-            self,
-            name: str,
-            input_ranges: list[tuple[int, int]],
-            total_lines: int,
-            expected_ranges: list[tuple[int, int]],
-        ):
-            self.name = name
-            self.input_ranges = input_ranges
-            self.total_lines = total_lines
-            self.expected_ranges = expected_ranges
+        name: str
+        input_ranges: list[tuple[int, int]]
+        total_lines: int
+        expected_ranges: list[tuple[int, int]]
 
     TEST_CASES: list[TestCase] = [
         TestCase(
@@ -314,18 +295,12 @@ def test__invert_ranges_success_cases():
 
 
 def test__merge_trailing_empty_lines_success_cases():
+    @dataclass
     class TestCase:
-        def __init__(
-            self,
-            name: str,
-            import_ranges: list[tuple[int, int]],
-            empty_line_ranges: list[tuple[int, int]],
-            expected_ranges: list[tuple[int, int]],
-        ):
-            self.name = name
-            self.import_ranges = import_ranges
-            self.empty_line_ranges = empty_line_ranges
-            self.expected_ranges = expected_ranges
+        name: str
+        import_ranges: list[tuple[int, int]]
+        empty_line_ranges: list[tuple[int, int]]
+        expected_ranges: list[tuple[int, int]]
 
     TEST_CASES: list[TestCase] = [
         TestCase(
