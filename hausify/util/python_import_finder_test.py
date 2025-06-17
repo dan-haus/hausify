@@ -1,5 +1,6 @@
-import pytest
 from dataclasses import dataclass
+
+import pytest
 
 
 def test_python_import_finder_returns_correct_non_import_ranges():
@@ -169,8 +170,9 @@ def test__get_import_line_ranges_success_cases():
         ),
     ]
 
-    from hausify.util.python_import_finder import _get_import_line_ranges
     from ast import parse
+
+    from hausify.util.python_import_finder import _get_import_line_ranges
 
     for test_case in TEST_CASES:
         ast = parse(test_case.source)

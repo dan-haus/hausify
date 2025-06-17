@@ -1,7 +1,8 @@
-from hausify.util.testing.build_test_file_structure import build_test_file_structure
 from dataclasses import dataclass
 from pathlib import Path
+
 from hausify.util.search import find_parent_configs
+from hausify.util.testing.build_test_file_structure import build_test_file_structure  # NOQA
 
 
 @dataclass

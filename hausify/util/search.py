@@ -1,4 +1,3 @@
-from hausify.util.filesystem import SourceTree
 from pathlib import Path
 
 
@@ -9,7 +8,8 @@ def find_parent_configs(
 ) -> dict[Path, list[Path]]:
     """Find parent configuration files in the source tree, and their source file groups.
     Args:
-        tree (SourceTree): The source tree to search in.
+        rootdir (Path): The root directory of the project.
+        source_files (list[Path]): List of source files to search for configuration files.
         config_names (list[str]): List of configuration file names to search for.
     Returns:
         dict[Path, list[Path]]: A dictionary mapping configuration file paths to their source files.
