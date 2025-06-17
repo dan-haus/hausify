@@ -8,7 +8,7 @@ def parse_args() -> argparse.Namespace:
 
     parser.add_argument(
         "--rootdir",
-        help="The root directory to start searching for config files.",
+        help="The root directory of the project (do not recurse above).",
         default=".",
         type=str,
     )
@@ -28,9 +28,22 @@ def parse_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
+        "--exclude_dir",
+        help="Directories to exclude from linting/formatting.",
+        default=[],
+        metavar="DIR_REGEX",
+        action="append",
+        type=str,
+    )
+
+    parser.add_argument(
         "files",
-        help="The files to lint/format. If not provided, all files in the root directory will be processed.",
+        help=(
+            "The files to lint/format. If not provided, all python (.py, .pyi) "
+            "files in the root directory will be processed."
+        ),
         nargs="*",
+        metavar="FILEPATH(S)",
         type=str,
     )
 
