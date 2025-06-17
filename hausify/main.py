@@ -2,7 +2,9 @@ import sys
 from subprocess import run as subprocess_run
 
 from hausify.args import parse_args
+from hausify.runners.exec_flake8 import exec_flake8
 from hausify.runners.exec_isort import exec_isort
+from hausify.runners.exec_mypy import exec_mypy
 from hausify.util.filesystem import SourceTree
 
 
@@ -29,8 +31,6 @@ def main():
             should_exit = True
 
     if args.tool == "all" or args.tool == "flake8":
-        from hausify.runners.exec_flake8 import exec_flake8
-
         result = exec_flake8(
             tree.rootdir,
             tree.source_files,
@@ -38,6 +38,17 @@ def main():
         )
         if result != "":
             print("FLAKE8 ERRORS:")
+            print(result)
+            should_exit = True
+
+    if args.tool == "all" or args.tool == "mypy":
+        result = exec_mypy(
+            tree.rootdir,
+            tree.source_files,
+            exec_cmd=subprocess_run,
+        )
+        if result != "":
+            print("MYPY ERRORS:")
             print(result)
             should_exit = True
 

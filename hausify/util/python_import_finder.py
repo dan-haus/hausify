@@ -73,7 +73,7 @@ def _get_import_line_ranges(tree: ast.Module) -> list[tuple[int, int]]:
     for node in ast.walk(tree):
         if isinstance(node, ast.Import) or isinstance(node, ast.ImportFrom):
             start_line = node.lineno
-            end_line = node.end_lineno if hasattr(node, "end_lineno") else start_line
+            end_line = node.end_lineno if node.end_lineno is not None else start_line
             import_lines.append((start_line, end_line))
 
     return _merge_consecutive_ranges(import_lines)
