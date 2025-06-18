@@ -1,0 +1,23 @@
+name: Initialize repository
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5.6.0
+      with:
+        python-version: '3.9'  # Specify the Python version
+
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
+      shell: bash
+
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        python3 -m venv .venv
+        source .venv/bin/activate
+        poetry install
+      shell: bash
