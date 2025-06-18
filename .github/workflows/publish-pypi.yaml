@@ -8,8 +8,16 @@ on:
       - 'v*.*.*'  # Trigger on version tags like v1.0.0
     branches:
       - main  # Ensure it runs only on the main branch
+
 jobs:
+  pre-commit:
+    uses: ./.github/workflows/pre-commit.yaml
+  
+  unit-tests:
+    uses: ./.github/workflows/unit-tests.yaml
+
   publish:
+    needs: [pre-commit, unit-tests]  # Ensure pre-commit and unit tests pass before publishing
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')  # Ensure it runs only for version tags
     permissions:
@@ -18,20 +26,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.9'  # Specify the Python version
-
-      - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
-
-      - name: Install dependencies
-        run: poetry install --no-root
+      - name: Initialize repository
+        uses: ./.github/actions/initialize-repo
 
       - name: Update version
         run: |
