@@ -1,12 +1,8 @@
 repos:
-  - repo: local
+  - repo: https://github.com/dan-haus/hausify
+    rev: v0.1.2
     hooks:
-      - id: hausify-py-check
-        name: Hausify Python Linter/Formatter
-        language: python
-        entry: python3 -m hausify.main
-        types: [python]
-        files: ^hausify/
+    -   id: hausify-py-check
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.33.0
     hooks:
