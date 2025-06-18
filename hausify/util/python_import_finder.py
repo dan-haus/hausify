@@ -10,7 +10,7 @@ class PythonImportFinder:
     ranges of import blocks and trailing empty lines.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.lines: list[str] = []
         self.tree: ast.Module = ast.parse("")
 

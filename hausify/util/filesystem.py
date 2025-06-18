@@ -25,6 +25,7 @@ class SourceTree:
         exclude_dirs: list[str],
     ):
         """Initialize the SourceTree with a root directory and source files.
+
         Args:
             rootdir (str): The root directory of the project. If empty, it will try
                 to find the git root.
@@ -65,7 +66,8 @@ def _discover_root(rootdir: str) -> Path:
 
 
 def _discover_source_files(rootdir: Path, exclude_dirs: list[str]) -> list[Path]:
-    """Discover source files in the root directory, excluding specified directories."""
+    """Discover source files in the root directory, excluding specified
+    directories."""
     exclude_dir_patterns = set(exclude_dirs).union(_default_exclude_dirs)
 
     dir_tests = [re.compile(exclude_dir) for exclude_dir in exclude_dir_patterns]

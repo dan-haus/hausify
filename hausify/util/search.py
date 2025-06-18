@@ -6,7 +6,9 @@ def find_parent_configs(
     source_files: list[Path],
     config_names: list[str],
 ) -> dict[Path, list[Path]]:
-    """Find parent configuration files in the source tree, and their source file groups.
+    """Find parent configuration files in the source tree, and their source
+    file groups.
+
     Args:
         rootdir (Path): The root directory of the project.
         source_files (list[Path]): List of source files to search for configuration files.
@@ -36,7 +38,9 @@ def _find_closest_parent(
     config: str,
     root: Path,
 ) -> Path:
-    """Find the closest parent directory containing the specified configuration file.
+    """Find the closest parent directory containing the specified configuration
+    file.
+
     Args:
         file (Path): The file to start searching from.
         config (str): The name of the configuration file to search for.
