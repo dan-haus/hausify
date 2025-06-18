@@ -1,0 +1,6 @@
+- id: hausify
+  name: hausify-py-check
+  entry: hausify
+  language: python
+  types: [python]
+
