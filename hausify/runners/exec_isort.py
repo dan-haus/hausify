@@ -83,4 +83,3 @@ def exec_isort(
     with ThreadPoolExecutor() as executor:
         results = runner.execute(executor)
     return results
-   
