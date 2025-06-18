@@ -10,47 +10,48 @@ from hausify.runners.runner import ToolCommand
 from hausify.runners.runner import ToolResult
 
 
-class IsortMode(str, Enum):
+class DocFormatterMode(str, Enum):
     FIX = "fix"
     CHECK = "check"
 
 
-class IsortRunner(PythonTool):
-    """Runner for the isort import sorter.
+class DocFormatterRunner(PythonTool):
+    """Runner for the docformatter tool.
 
-    This runner finds isort configuration files in the source tree and
-    sad fasd fasdf asdf asdf asdf asdf asdf f asdf asdasdf. asdf asdf
-    asdfasdf. asdf lkasjdflkjasdflkasjdf executes isort on the provided
-    files.
+    This runner finds docformatter configuration files in the source
+    tree and executes docformatter on the provided files.
     """
 
-    _configs = [".isort.cfg", "pyproject.toml", "setup.cfg", "tox.ini"]
+    _configs = ["pyproject.toml"]
 
     def __init__(
         self,
         root: Path,
         files: list[Path],
         exec_cmd: Callable,
-        mode: IsortMode = IsortMode.CHECK,
+        mode: DocFormatterMode = DocFormatterMode.CHECK,
     ) -> None:
         self._mode = mode
         super().__init__(root, files, exec_cmd)
 
     def build_commands(self, config: Path, files: list[Path]) -> list[ToolCommand]:
-        """Build an isort command for each file in the provided list."""
+        """Build a docformatter command for each file in the provided list."""
         cmd = ToolCommand(
             config=str(config),
             files=[str(f) for f in files],
             argv=[
-                "isort",
+                "docformatter",
             ],
         )
-        if self._mode == IsortMode.CHECK:
+
+        if self._mode == DocFormatterMode.CHECK:
             cmd.argv.append("--check")
             cmd.argv.append("--diff")
+        else:
+            cmd.argv.append("--in-place")
 
         if config.is_file():
-            cmd.argv.extend(["--settings-path", str(config)])
+            cmd.argv.extend(["--config", str(config)])
 
         cmd.argv.extend(str(f) for f in files)
         return [cmd]
@@ -69,18 +70,20 @@ class IsortRunner(PythonTool):
         elif isinstance(output, subprocess.CalledProcessError):
             # If the command failed, we assume it was not successful
             result.success = False
+            # result.logs.extend(output.stdout.split("\n"))
             result.errors.extend(output.stdout.split("\n"))
         return result
 
 
-def exec_isort(
+def exec_docformatter(
     root: Path,
     files: list[Path],
     exec_cmd: Callable = subprocess.run,
-    mode: IsortMode = IsortMode.CHECK,
+    mode: DocFormatterMode = DocFormatterMode.CHECK,
 ) -> list[ToolResult]:
-    runner = IsortRunner(root, files, exec_cmd, mode)
+    """Executes docformatter on the provided files."""
+    runner = DocFormatterRunner(root, files, exec_cmd, mode)
     with ThreadPoolExecutor() as executor:
         results = runner.execute(executor)
+
     return results
-   

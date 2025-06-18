@@ -1,66 +1,78 @@
 import subprocess
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Callable
+from typing import Union
 
-from hausify.util.search import find_parent_configs
+from hausify.runners.runner import PythonTool
+from hausify.runners.runner import ToolCommand
+from hausify.runners.runner import ToolResult
 
-_configs = [
-    "mypy.ini",
-    ".mypy.ini",
-    "pyproject.toml",
-    "setup.cfg",
-]
+
+class MyPyRunner(PythonTool):
+    """Runner for the mypy type checker.
+
+    This runner finds mypy configuration files in the source tree and
+    executes mypy on the provided files, excluding any test files (those
+    ending with _test.py).
+    """
+
+    _configs = ["mypy.ini", ".mypy.ini", "pyproject.toml", "setup.cfg"]
+
+    def build_commands(self, config: Path, files: list[Path]) -> list[ToolCommand]:
+        """Build mypy command for a set of files with a specific config."""
+
+        non_test_files = [str(f) for f in files if not f.name.endswith("_test.py")]
+
+        cmd = ToolCommand(
+            config=str(config),
+            files=non_test_files,
+            argv=[
+                "mypy",
+                "--show-error-codes",
+                "--show-column-numbers",
+            ],
+            env={
+                "MYPY_FORCE_COLOR": "1",
+            },
+        )
+
+        if config.is_file():
+            cmd.argv.append(f"--config-file={str(config)}")
+
+        cmd.argv.extend(non_test_files)
+        return [cmd]
+
+    def handle_result(
+        self,
+        cmd: ToolCommand,
+        output: Union[subprocess.CompletedProcess, subprocess.CalledProcessError],
+    ) -> ToolResult:
+        result = ToolResult(
+            config=cmd.config,
+            files=cmd.files,
+        )
+
+        if isinstance(output, subprocess.CompletedProcess):
+            result.success = True
+            result.logs.extend(output.stdout.split("\n"))
+        elif isinstance(output, subprocess.CalledProcessError):
+            result.success = False
+            if output.stderr != "":
+                result.logs.extend(output.stdout.split("\n"))
+                result.errors.extend(output.stderr.split("\n"))
+            else:
+                result.errors.extend(output.stdout.split("\n"))
+        return result
 
 
 def exec_mypy(
     root: Path,
     files: list[Path],
     exec_cmd: Callable = subprocess.run,
-) -> str:
-    pyfiles = [f for f in files if f.suffix in (".py", ".pyi")]
-    if not pyfiles:
-        return ""
+) -> list[ToolResult]:
+    runner = MyPyRunner(root, files, exec_cmd=exec_cmd)
+    with ThreadPoolExecutor() as exec:
+        results = runner.execute(exec)
 
-    iterations = find_parent_configs(root, pyfiles, _configs)
-    all_errors = []
-    for config, fileset in iterations.items():
-        if len(fileset) == 0:
-            continue
-
-        result = _run_mypy_on_set(
-            fileset=fileset,
-            config=config,
-            exec_cmd=exec_cmd,
-        )
-
-        if result != "":
-            all_errors.append(f"(using config {config}):\n{result}")
-
-    return "\n".join(all_errors)
-
-
-def _run_mypy_on_set(
-    fileset: list[Path],
-    config: Path,
-    exec_cmd: Callable = subprocess.run,
-) -> str:
-    """Run mypy on a set of files with a specific config."""
-
-    cmd = [
-        "mypy",
-        "--show-error-codes",
-    ]
-    if config.is_file():
-        cmd.append(f"--config-file={str(config)}")
-
-    cmd.extend([str(f) for f in fileset])
-    try:
-        exec_cmd(
-            cmd,
-            check=True,
-            text=True,
-            capture_output=True,
-        )
-        return ""
-    except subprocess.CalledProcessError as e:
-        return e.stderr
+    return results
