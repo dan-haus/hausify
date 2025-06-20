@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
 
-.PHONY: setup
+.PHONY: setup install-local
 
 setup:
 	@python3 -m venv .venv --clear
@@ -12,3 +12,8 @@ setup:
 	@echo ""
 	@echo ""
 	@echo "Setup complete. Activate the virtual environment with: source .venv/bin/activate"
+
+install-local:
+	@poetry version $(shell git describe --tags --abbrev=0)
+	@pipx install --force .
+	@poetry version 0.0.0

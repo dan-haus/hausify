@@ -1,0 +1,1 @@
+{"root":["./src/extension.ts","./src/common/channel.ts","./src/common/hausifylsp.ts","./src/common/pythonextension.ts","./src/common/workspace.ts"],"version":"5.8.3"}
