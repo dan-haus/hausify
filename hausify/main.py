@@ -1,7 +1,5 @@
-import datetime as dt
 import sys
 from subprocess import run as subprocess_run
-from typing import Optional
 
 from hausify.args import parse_args
 from hausify.runners import exec_black

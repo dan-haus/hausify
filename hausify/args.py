@@ -66,6 +66,12 @@ def parse_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
+        "--fix",
+        help="Run all tools in fix mode (if applicable).",
+        action="store_true",
+    )
+
+    parser.add_argument(
         "files",
         help=(
             "The files to lint/format. If not provided, all python (.py, .pyi) "
@@ -76,4 +82,10 @@ def parse_args() -> argparse.Namespace:
         type=str,
     )
 
-    return parser.parse_args()
+    args = parser.parse_args()
+    if args.fix:
+        args.black_mode = BlackFormatMode.FIX
+        args.docformatter_mode = DocFormatterMode.FIX
+        args.isort_mode = IsortMode.FIX
+
+    return args
