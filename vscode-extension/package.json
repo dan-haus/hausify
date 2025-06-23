@@ -1,10 +1,10 @@
 {
 	"name": "hausify",
 	"description": "Haus Analytics - Python Extension for Linting and Formatting",
-	"author": "Daniel Walt <dan@haus.io>, <walt@danielwalt.io>",
+	"author": "Daniel Walt <walt@danielwalt.io, dan@haus.io>",
 	"license": "MIT",
 	"version": "0.0.1",
-	"publisher": "dan-haus",
+	"publisher": "daniel-walt",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/dan-haus/hausify"
@@ -59,6 +59,7 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
+		"deploy-pre": "vsce package --pre-release && vsce publish --pre-release",
 		"compile": "tsc -b",
 		"watch": "tsc -b -w",
 		"lint": "eslint",
