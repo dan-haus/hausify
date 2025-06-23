@@ -20,14 +20,16 @@ class Flake8Runner(PythonTool):
 
     def build_commands(self, config: Path, files: list[Path]) -> list[ToolCommand]:
         """Build a Flake8 command for each file in the provided list."""
-        cmd = ToolCommand(
-            config=str(config),
-            files=[str(f) for f in files],
-            argv=["flake8", "--color=always"],
-        )
-        if config.is_file():
-            cmd.argv.extend(["--config", str(config)])
-        return [cmd]
+        all_commands: list[ToolCommand] = []
+        for filepath in files:
+            cmd = ToolCommand(
+                config=str(config),
+                files=[str(filepath)],
+                argv=["flake8", "--color=always"],
+            )
+            if config.is_file():
+                cmd.argv.extend(["--config", str(config)])
+        return all_commands
 
     def handle_result(
         self,
@@ -58,26 +60,3 @@ def exec_flake8(
         results = runner.execute(executor)
 
     return results
-
-
-def _run_flake8_on_set(
-    fileset: list[Path],
-    config: Path,
-    exec_cmd: Callable = subprocess.run,
-) -> str:
-    """Run flake8 on a set of files with a specific config."""
-
-    cmd = [
-        "flake8",
-        "--color=always",
-    ]
-    if config.is_file():
-        cmd.extend(["--config", str(config)])
-
-    cmd.extend(str(f) for f in fileset)
-
-    try:
-        result = exec_cmd(cmd, capture_output=True, text=True, check=True)
-        return result.stdout
-    except subprocess.CalledProcessError as e:
-        return e.stdout + e.stderr
