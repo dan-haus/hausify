@@ -1,7 +1,7 @@
 {
 	"name": "hausify",
-	"description": "VSCode part of a language server",
-	"author": "Microsoft Corporation",
+	"description": "Haus Analytics - Python Extension for Linting and Formatting",
+	"author": "Daniel Walt <dan@haus.io>, <walt@danielwalt.io>",
 	"license": "MIT",
 	"version": "0.0.1",
 	"publisher": "dan-haus",
