@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-import pytest
+import pytest  # NOQA
 
 
 def test_python_import_finder_returns_correct_non_import_ranges():

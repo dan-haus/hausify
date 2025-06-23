@@ -49,8 +49,6 @@ def _find_closest_parent(
           configuration file, or the root directory if not found.
     """
     current_dir = file.parent
-    if not current_dir.exists():
-        return root
 
     depth = 0
     while depth < 50:
@@ -60,6 +58,9 @@ def _find_closest_parent(
 
         if current_dir == root:
             return root
+
+        if current_dir.parent == current_dir:
+            break
 
         current_dir = current_dir.parent
         depth += 1

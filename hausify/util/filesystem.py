@@ -10,6 +10,7 @@ _default_exclude_dirs = set(
         r"\.pytest_cache",
         r"\.mypy_cache",
         r"\.venv",
+        r"node_modules",
     ]
 )
 
@@ -37,7 +38,10 @@ class SourceTree:
         self.source_files: list[Path] = []
 
         if len(source_files) == 0:
-            self.source_files = _discover_source_files(self.rootdir, exclude_dirs)
+            self.source_files = _discover_source_files(
+                self.rootdir,
+                exclude_dirs,
+            )
         else:
             self.source_files = _resolve_source_files(self.rootdir, source_files)
 

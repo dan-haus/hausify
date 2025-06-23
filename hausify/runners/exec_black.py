@@ -64,10 +64,15 @@ class BlackRunner(PythonTool):
 
             finder = PythonImportFinder()
             finder.load_source_file(Path(filename))
+
+            has_ranges = False
             for start, end in finder.get_formatting_ranges():
+                has_ranges = True
                 cmd.argv.extend(["--line-ranges", f"{start}-{end}"])
-            cmd.argv.append(str(filename))
-            all_commands.append(cmd)
+
+            if has_ranges:
+                cmd.argv.append(str(filename))
+                all_commands.append(cmd)
 
         return all_commands
 

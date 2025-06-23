@@ -1,0 +1,67 @@
+{
+	"name": "hausify",
+	"description": "VSCode part of a language server",
+	"author": "Microsoft Corporation",
+	"license": "MIT",
+	"version": "0.0.1",
+	"publisher": "dan-haus",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/dan-haus/hausify"
+	},
+	"engines": {
+		"vscode": "^1.100.0"
+	},
+	"activationEvents": [
+		"onLanguage:python"
+	],
+	"main": "./out/extension",
+	"contributes": {
+		"configuration": {
+			"type": "object",
+			"title": "Hausify LSP Settings",
+			"properties": {
+				"hausify.enable": {
+					"type": "boolean",
+					"default": true,
+					"description": "Enable Hausify language server"
+				},
+				"hausify.lspPath": {
+					"type": "string",
+					"default": "",
+					"description": "Path to the Hausify server executable"
+				},
+				"hausify.lspLogPath": {
+					"type": "string",
+					"default": "",
+					"description": "Output path for Hausify server logs"
+				}
+			}
+		}
+	},
+	"dependencies": {
+		"@vscode/python-extension": "^1.0.5",
+		"fs-extra": "^11.3.0",
+		"glob": "^11.0.0",
+		"vscode-languageclient": "^9.0.1"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
+		"@types/mocha": "^10.0.6",
+		"@types/node": "^20",
+		"@types/vscode": "^1.75.1",
+		"@vscode/test-electron": "^2.3.9",
+		"eslint": "^9.13.0",
+		"mocha": "^10.3.0",
+		"typescript": "^5.8.2",
+		"typescript-eslint": "^8.26.0"
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -b",
+		"watch": "tsc -b -w",
+		"lint": "eslint",
+		"test": "sh ./scripts/e2e.sh"
+	}
+}
