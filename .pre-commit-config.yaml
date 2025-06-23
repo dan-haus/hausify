@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/dan-haus/hausify
-    rev: v0.1.2
+    rev: v0.1.4
     hooks:
     -   id: hausify
   - repo: https://github.com/python-jsonschema/check-jsonschema
